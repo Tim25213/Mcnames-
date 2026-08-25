@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Имена Minecraft</title>
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230a0c0f'/><rect x='30' y='30' width='40' height='40' fill='%2358d68d'/></svg>">
+<style>
+  :root{
+    --bg:#0a0c0f;
+    --panel:#14171c;
+    --panel2:#1b1f26;
+    --line:#262b33;
+    --text:#eceff2;
+    --muted:#8a919c;
+    --accent:#58d68d;
+    --accent-dim:#2f6b4c;
+    --og:#e0b04b;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif;
+    padding-bottom:env(safe-area-inset-bottom);
+  }
+  header{
+    position:sticky;top:0;z-index:5;
+    background:var(--bg);
+    border-bottom:1px solid var(--line);
+    padding:calc(env(safe-area-inset-top) + 14px) 16px 14px;
+  }
+  .brand{display:flex;align-items:center;gap:8px;margin-bottom:14px;}
+  .brand .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);}
+  .brand b{font-size:15px;letter-spacing:0.04em;}
+  .brand span{color:var(--muted);font-size:12px;}
+  h1{margin:0 0 12px;font-size:20px;letter-spacing:-0.01em;}
+  .searchbar{position:relative;margin-bottom:12px;}
+  .searchbar input{
+    width:100%;
+    background:var(--panel);
+    border:1px solid var(--line);
+    color:var(--text);
+    font-size:16px;
+    padding:12px 40px 12px 14px;
+    border-radius:12px;
+    outline:none;
+  }
+  .searchbar input:focus{border-color:var(--accent-dim);}
+  .searchbar::after{
+    content:"⌕";
+    position:absolute;right:14px;top:50%;transform:translateY(-50%);
+    color:var(--muted);font-size:18px;pointer-events:none;
+  }
+  .controls{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:14px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+  .row{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  .row label{font-size:13px;color:var(--muted);}
+  select{
+    background:var(--panel2);
+    color:var(--text);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:7px 10px;
+    font-size:14px;
+    outline:none;
+  }
+  input[type=range]{
+    -webkit-appearance:none;
+    width:100%;
+    height:4px;
+    background:var(--line);
+    border-radius:4px;
+    outline:none;
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;
+    width:18px;height:18px;border-radius:50%;
+    background:var(--accent);
+    border:2px solid var(--bg);
+  }
+  .slider-row{display:flex;align-items:center;gap:10px;}
+  .slider-row .val{font-size:13px;color:var(--accent);min-width:18px;text-align:right;}
+  .toggle-row{display:flex;align-items:center;justify-content:space-between;}
+  .switch{
+    position:relative;width:42px;height:24px;flex:none;
+  }
+  .switch input{position:absolute;opacity:0;width:100%;height:100%;margin:0;cursor:pointer;}
+  .slider-track{
+    position:absolute;inset:0;background:var(--panel2);border:1px solid var(--line);
+    border-radius:20px;transition:background .15s;
+  }
+  .slider-knob{
+    position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;
+    background:var(--muted);transition:transform .15s,background .15s;
+  }
+  .switch input:checked + .slider-track{background:var(--accent-dim);border-color:var(--accent);}
+  .switch input:checked + .slider-track .slider-knob{transform:translateX(18px);background:var(--accent);}
+  .resetbtn{
+    font-size:13px;color:var(--muted);background:var(--panel2);
+    border:1px solid var(--line);border-radius:8px;padding:7px 12px;
+  }
+  .refresh{
+    font-size:13px;color:var(--accent);background:var(--panel2);
+    border:1px solid var(--accent-dim);border-radius:8px;padding:7px 12px;
+  }
+  .refresh.loading{opacity:.5;}
+  .status{font-size:12px;color:var(--muted);margin-top:8px;min-height:14px;}
+  .status.err{color:#e07a5f;}
+  .status.ok{color:var(--accent);}
+  main{padding:12px 16px 40px;}
+  .count{color:var(--muted);font-size:13px;margin:2px 2px 12px;}
+  ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;}
+  li{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:12px 14px;
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+  }
+  .name{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1;}
+  .name b{
+    font-size:16px;font-weight:600;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    font-family:"SF Mono",Menlo,monospace;
+  }
+  .meta{font-size:12px;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap;}
+  .badges{display:flex;align-items:center;gap:6px;flex:none;}
+  .len{
+    font-size:11px;color:var(--muted);
+    border:1px solid var(--line);border-radius:8px;padding:3px 7px;
+  }
+  .og{
+    font-size:11px;font-weight:700;color:var(--bg);background:var(--og);
+    border-radius:8px;padding:3px 7px;letter-spacing:0.02em;
+  }
+  .copybtn{
+    font-size:15px;color:var(--muted);background:none;border:none;padding:4px;
+  }
+  .empty{text-align:center;color:var(--muted);padding:60px 20px;font-size:14px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand"><span class="dot"></span><b>NAMES</b><span>· офлайн</span></div>
+  <h1>Имена Minecraft</h1>
+  <div class="searchbar">
+    <input id="q" type="text" placeholder="Поиск по имени..." autocomplete="off" autocorrect="off" spellcheck="false">
+  </div>
+  <div class="controls">
+    <div class="row">
+      <label>Длина, до</label>
+      <select id="lenSelect">
+        <option value="16">любая</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+        <option value="13">13</option>
+        <option value="14">14</option>
+        <option value="15">15</option>
+        <option value="16">16</option>
+      </select>
+    </div>
+    <div class="row">
+      <label>Популярность, от</label>
+    </div>
+    <div class="slider-row">
+      <input id="popSlider" type="range" min="0" max="5" step="1" value="0">
+      <span class="val" id="popVal">0</span>
+    </div>
+    <div class="toggle-row">
+      <label>Только OG-имена</label>
+      <label class="switch">
+        <input type="checkbox" id="ogToggle">
+        <span class="slider-track"><span class="slider-knob"></span></span>
+      </label>
+    </div>
+    <div class="row">
+      <button class="resetbtn" id="resetBtn">Сбросить</button>
+      <button class="refresh" id="refreshBtn">⟳ Обновить</button>
+    </div>
+    <div id="status" class="status"></div>
+  </div>
+</header>
+
+<main>
+  <div class="count" id="count"></div>
+  <ul id="list"></ul>
+  <div class="empty" id="empty" style="display:none">Ничего не найдено</div>
+</main>
+
+<script>
+const DATA = [{"name":"_WaguriKaoruko_","available_from":"2026-08-25T07:34:24Z","og":false,"popularity":0,"accurate":false},{"name":"PixieyKissies","available_from":"2026-08-25T07:34:28Z","og":false,"popularity":5,"accurate":false},{"name":"JulieLoveCats","available_from":"2026-08-25T07:34:36Z","og":false,"popularity":5,"accurate":false},{"name":"_K4WTwT7_","available_from":"2026-08-25T07:34:40Z","og":false,"popularity":1,"accurate":false},{"name":"Xx_IneedSleep_xX","available_from":"2026-08-25T07:35:23Z","og":false,"popularity":4,"accurate":false},{"name":"BeadWithCheese","available_from":"2026-08-25T07:35:35Z","og":false,"popularity":3,"accurate":false},{"name":"SurgingD1vinity_","available_from":"2026-08-25T07:35:48Z","og":false,"popularity":3,"accurate":false},{"name":"CrapGamerGR","available_from":"2026-08-25T07:36:08Z","og":false,"popularity":4,"accurate":false},{"name":"RanByBroccoli","available_from":"2026-08-25T07:36:37Z","og":false,"popularity":2,"accurate":false},{"name":"360ShotInHead","available_from":"2026-08-25T07:36:49Z","og":false,"popularity":0,"accurate":false},{"name":"Wez8Gandalf","available_from":"2026-08-25T07:37:04Z","og":false,"popularity":4,"accurate":false},{"name":"Nickedz","available_from":"2026-08-25T07:37:38Z","og":false,"popularity":2,"accurate":false},{"name":"anan_4573","available_from":"2026-08-25T07:38:12Z","og":false,"popularity":4,"accurate":false},{"name":"E210","available_from":"2026-08-25T07:38:28Z","og":false,"popularity":5,"accurate":false},{"name":"shirobw_","available_from":"2026-08-25T07:38:29Z","og":false,"popularity":1,"accurate":false},{"name":"ruixcs","available_from":"2026-08-25T07:38:32Z","og":false,"popularity":4,"accurate":false},{"name":"JPOfficial","available_from":"2026-08-25T07:38:42Z","og":false,"popularity":5,"accurate":false},{"name":"Rip_Voice","available_from":"2026-08-25T07:38:49Z","og":false,"popularity":0,"accurate":false},{"name":"KrytoNexX_YT","available_from":"2026-08-25T07:38:50Z","og":false,"popularity":4,"accurate":false},{"name":"Xx666BurzumxX","available_from":"2026-08-25T07:38:58Z","og":false,"popularity":3,"accurate":false},{"name":"theenigmatic7814","available_from":"2026-08-25T07:39:11Z","og":false,"popularity":3,"accurate":false},{"name":"XXXTENTACION444","available_from":"2026-08-25T07:39:20Z","og":false,"popularity":2,"accurate":false},{"name":"Ralfix_GG","available_from":"2026-08-25T07:39:56Z","og":false,"popularity":2,"accurate":false},{"name":"rkdwldn1130","available_from":"2026-08-25T07:40:11Z","og":false,"popularity":3,"accurate":false},{"name":"_CraCk3R_","available_from":"2026-08-25T07:40:41Z","og":false,"popularity":4,"accurate":false}];
+
+let names = DATA;
+
+const list = document.getElementById('list');
+const empty = document.getElementById('empty');
+const countEl = document.getElementById('count');
+const input = document.getElementById('q');
+const lenSelect = document.getElementById('lenSelect');
+const popSlider = document.getElementById('popSlider');
+const popVal = document.getElementById('popVal');
+const ogToggle = document.getElementById('ogToggle');
+const resetBtn = document.getElementById('resetBtn');
+const refreshBtn = document.getElementById('refreshBtn');
+const statusEl = document.getElementById('status');
+
+function setStatus(msg, cls){
+  statusEl.textContent = msg;
+  statusEl.className = 'status' + (cls ? ' ' + cls : '');
+}
+
+async function fetchNewNames(){
+  refreshBtn.classList.add('loading');
+  setStatus('Загрузка…');
+  const targets = [
+    'https://laby.net/api/v3/names',
+    'https://corsproxy.io/?url=' + encodeURIComponent('https://laby.net/api/v3/names')
+  ];
+  let ok = false;
+  for(const url of targets){
+    try{
+      const res = await fetch(url, {cache:'no-store'});
+      if(!res.ok) continue;
+      const data = await res.json();
+      if(Array.isArray(data) && data.length){
+        names = data;
+        render();
+        setStatus('Обновлено · ' + new Date().toLocaleTimeString('ru-RU'), 'ok');
+        ok = true;
+        break;
+      }
+    }catch(e){ /* try next target */ }
+  }
+  if(!ok){
+    setStatus('Нет интернета или сайт недоступен — показан последний сохранённый список', 'err');
+  }
+  refreshBtn.classList.remove('loading');
+}
+
+function fmtDate(iso){
+  const d = new Date(iso);
+  return d.toLocaleString('ru-RU', {day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit'});
+}
+
+function render(){
+  const q = input.value.trim().toLowerCase();
+  const maxLen = parseInt(lenSelect.value, 10);
+  const minPop = parseInt(popSlider.value, 10);
+  const onlyOg = ogToggle.checked;
+
+  let items = names.filter(n =>
+    n.name.toLowerCase().includes(q) &&
+    n.name.length <= maxLen &&
+    n.popularity >= minPop &&
+    (!onlyOg || n.og)
+  );
+
+  items = [...items].sort((a,b) => new Date(a.available_from) - new Date(b.available_from));
+
+  countEl.textContent = items.length + (items.length === 1 ? ' имя' : ' имён');
+  list.innerHTML = '';
+  empty.style.display = items.length ? 'none' : 'block';
+
+  for(const n of items){
+    const li = document.createElement('li');
+    li.innerHTML = `
+      <div class="name">
+        <b>${n.name}</b>
+        <div class="meta">
+          <span>${n.name.length} симв.</span>
+          <span>★ ${n.popularity}</span>
+          <span>${fmtDate(n.available_from)}</span>
+        </div>
+      </div>
+      <div class="badges">
+        <span class="len">${n.name.length}</span>
+        ${n.og ? '<span class="og">OG</span>' : ''}
+        <button class="copybtn" data-name="${n.name}">⧉</button>
+      </div>
+    `;
+    list.appendChild(li);
+  }
+
+  list.querySelectorAll('.copybtn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      navigator.clipboard && navigator.clipboard.writeText(btn.dataset.name);
+      btn.textContent = '✓';
+      setTimeout(() => btn.textContent = '⧉', 900);
+    });
+  });
+}
+
+input.addEventListener('input', render);
+lenSelect.addEventListener('change', render);
+popSlider.addEventListener('input', () => { popVal.textContent = popSlider.value; render(); });
+ogToggle.addEventListener('change', render);
+refreshBtn.addEventListener('click', fetchNewNames);
+resetBtn.addEventListener('click', () => {
+  input.value = '';
+  lenSelect.value = '16';
+  popSlider.value = '0';
+  popVal.textContent = '0';
+  ogToggle.checked = false;
+  render();
+});
+
+render();
+</script>
+</body>
+</html>
